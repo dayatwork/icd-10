@@ -62,10 +62,18 @@ export class ICD10 {
 
   async findByName(query) {
     const queryFormatted = query.replace(/\./g, "");
+    // const queryFormatted = query.replace(/ /g, " ");
+    // const queryFormatted = `${query}`;
+    const queries = queryFormatted
+      .split(" ")
+      .map((q) => `@name:%${q}%`)
+      .join(" ");
+
     const [count, ...icd10KeysAndData] = await this.connection.call(
       "FT.SEARCH",
       INDEX,
-      `@name:%${queryFormatted}%`,
+      // `@name:%${queryFormatted}%`,
+      queries,
       "LIMIT",
       0,
       16
