@@ -61,7 +61,7 @@ export class ICD10 {
   }
 
   async findByName(query) {
-    const [count, ...icd10KeysAndData] = await this.connection.call(
+    const res = await this.connection.call(
       "FT.SEARCH",
       INDEX,
       `@name:%${query}%`,
@@ -69,6 +69,10 @@ export class ICD10 {
       0,
       16
     );
+
+    console.log({ res });
+
+    const [count, ...icd10KeysAndData] = res;
 
     const icd10Data = icd10KeysAndData.filter((_, index) => index % 2 !== 0);
     const formattedIcd10Data = icd10Data.map((arr) => {
