@@ -61,10 +61,11 @@ export class ICD10 {
   }
 
   async findByName(query) {
+    const query = query.replace(".", "");
     const [count, ...icd10KeysAndData] = await this.connection.call(
       "FT.SEARCH",
       INDEX,
-      `@name:"%${query}%"`,
+      `@name:%${query}%`,
       "LIMIT",
       0,
       16
